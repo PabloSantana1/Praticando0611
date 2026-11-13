@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praticando 4 - Manipulações</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-3">
+        <h1>Praticando 4 - Manipulações</h1>
+
+        <div class="d-flex justify-content-between flex-wrap flex-lg-nowrap gap-1">
+            <!-- Controle de lado -->
+            <div class="flex-shrink-0">
+                <h5 class="fw-normal">Lado</h5>
+                <div class="btn-group" role="group" aria-label="Lado">
+                    <button type="button" class="btn btn-primary" id="btnEsquerdo">Esquerdo</button>
+                    <button type="button" class="btn btn-outline-primary" id="btnDireito">Direito</button>
+                </div>
+            </div>
+
+            <!-- Parágrafos -->
+            <div class="flex-shrink-0">
+                <h5 class="fw-normal">Parágrafos</h5>
+                <button type="button" class="btn btn-primary" id="btnAddParagrafo">Adicionar</button>
+                <button type="button" class="btn btn-primary" id="btnRemPrimeiro">Remover primeiro</button>
+                <button type="button" class="btn btn-primary" id="btnRemUltimo">Remover último</button>
+                <button type="button" class="btn btn-primary" id="btnRemParagrafos">Remover todos</button>
+            </div>
+
+            <!-- Imagens -->
+            <div class="flex-shrink-0">
+                <h5 class="fw-normal">Imagens</h5>
+                <button type="button" class="btn btn-primary" id="btnAddImagem">Adicionar</button>
+                <button type="button" class="btn btn-primary" id="btnRemImagem">Remover uma</button>
+                <button type="button" class="btn btn-primary" id="btnRemImagens">Remover todas</button>
+            </div>
+        </div>
+
+        <!-- Onde parágrafos e imagens são inseridos -->
+        <div id="paragrafos" class="mt-3 text-start"></div>
+        <div id="imagens" class="text-start"></div>
+    </div>
+
+    <script>
+        const btnEsquerdo = document.getElementById("btnEsquerdo");
+        const btnDireito = document.getElementById("btnDireito");
+        const divParagrafos = document.getElementById("paragrafos");
+        const divImagens = document.getElementById("imagens");
+
+        // O número do parágrafo continua crescendo mesmo depois de remover (#5, #6, #7...)
+        let contadorParagrafos = 0;
+
+        // ---------- Lado (Esquerdo / Direito) ----------
+        function definirLado(lado) {
+            const direito = lado === "direito";
+
+            // alinhamento do conteúdo (os já existentes também mudam de lado)
+            [divParagrafos, divImagens].forEach(function (div) {
+                div.classList.toggle("text-start", !direito);
+                div.classList.toggle("text-end", direito);
+            });
+
+            // botão do lado ativo fica preenchido, o outro fica apenas com contorno
+            btnEsquerdo.classList.toggle("btn-primary", !direito);
+            btnEsquerdo.classList.toggle("btn-outline-primary", direito);
+            btnDireito.classList.toggle("btn-primary", direito);
+            btnDireito.classList.toggle("btn-outline-primary", !direito);
+        }
+
+        btnEsquerdo.addEventListener("click", function () { definirLado("esquerdo"); });
+        btnDireito.addEventListener("click", function () { definirLado("direito"); });
+
+        // ---------- Parágrafos ----------
+        document.getElementById("btnAddParagrafo").addEventListener("click", function () {
+            contadorParagrafos++;
+            const p = document.createElement("p");
+            p.textContent = "#" + contadorParagrafos + " - Lorem ipsum dolor sit amet, consectetur adipisicing elit.";
+            p.classList.add("mb-2");
+            divParagrafos.appendChild(p);
+        });
+
+        document.getElementById("btnRemPrimeiro").addEventListener("click", function () {
+            if (divParagrafos.firstElementChild) {
+                divParagrafos.removeChild(divParagrafos.firstElementChild);
+            }
+        });
+
+        document.getElementById("btnRemUltimo").addEventListener("click", function () {
+            if (divParagrafos.lastElementChild) {
+                divParagrafos.removeChild(divParagrafos.lastElementChild);
+            }
+        });
+
+        document.getElementById("btnRemParagrafos").addEventListener("click", function () {
+            divParagrafos.innerHTML = "";
+        });
+
+        // ---------- Imagens ----------
+        document.getElementById("btnAddImagem").addEventListener("click", function () {
+            const img = document.createElement("img");
+            img.src = "img/gatinho.jpg";
+            img.alt = "Gatinho";
+            img.width = 135;
+            img.classList.add("m-3");
+            divImagens.appendChild(img);
+        });
+
+        document.getElementById("btnRemImagem").addEventListener("click", function () {
+            if (divImagens.lastElementChild) {
+                divImagens.removeChild(divImagens.lastElementChild);
+            }
+        });
+
+        document.getElementById("btnRemImagens").addEventListener("click", function () {
+            divImagens.innerHTML = "";
+        });
+    </script>
+</body>
+
+</html>

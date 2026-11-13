@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praticando 5 - Mini-game JS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .quadrado {
+            display: inline-block;
+            width: 135px;
+            height: 135px;
+            border: 5px solid black;
+            margin: 3px;
+            cursor: pointer;
+        }
+
+        .vermelho { background-color: red; }
+        .azul { background-color: blue; }
+        .verde { background-color: green; }
+
+
+        .selecionado {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            border-color: yellow;
+        }
+
+        .tecla {
+            background-color: #fff0cc;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <h1>Praticando 5 - Mini-game JS</h1>
+
+        <h5 class="text-decoration-underline">Instruções:</h5>
+        <ol class="fw-semibold fs-5">
+            <li>Clique em um dos quadrados coloridos</li>
+            <li>Depois use as teclas
+                <span class="tecla">W</span>
+                <span class="tecla">A</span>
+                <span class="tecla">S</span>
+                <span class="tecla">D</span>
+                para movimentar os elementos para cima, esquerda, baixo e direita respectivamente.
+            </li>
+        </ol>
+
+        <div class="text-center">
+            <img src="img/wasd.jpg" alt="Teclas de direção e W A S D" height="100">
+        </div>
+
+        <div class="mt-4">
+            <div class="quadrado vermelho"></div>
+            <div class="quadrado azul"></div>
+            <div class="quadrado verde"></div>
+        </div>
+    </div>
+
+    <script>
+        const PASSO = 10;                 
+        const METADE = 72;               
+        const quadrados = document.querySelectorAll(".quadrado");
+        let selecionado = null;
+
+        // ---------- Seleção ----------
+        quadrados.forEach(function (quadrado) {
+            quadrado.addEventListener("click", function () {
+                if (selecionado === quadrado) {
+                    // clicou de novo no selecionado: volta à posição original
+                    quadrado.classList.remove("selecionado");
+                    quadrado.style.marginTop = "";
+                    quadrado.style.marginLeft = "";
+                    selecionado = null;
+                } else if (selecionado !== null) {
+                    alert("Atenção! Já há um quadrado selecionado, desselecione-o antes de selecionar outro.");
+                } else {
+                    selecionado = quadrado;
+                    quadrado.classList.add("selecionado");
+                    quadrado.style.marginTop = (-METADE) + "px";
+                    quadrado.style.marginLeft = (-METADE) + "px";
+                }
+            });
+        });
+
+        // ---------- Movimento (W A S D) ----------
+        function margem(elemento, propriedade) {
+            const valor = parseInt(elemento.style[propriedade]);
+            return isNaN(valor) ? 0 : valor;
+        }
+
+        document.addEventListener("keydown", function (evento) {
+            if (selecionado === null) return;
+
+            switch (evento.code) {
+                case "KeyW": // cima
+                    selecionado.style.marginTop = (margem(selecionado, "marginTop") - PASSO) + "px";
+                    break;
+                case "KeyS": // baixo
+                    selecionado.style.marginTop = (margem(selecionado, "marginTop") + PASSO) + "px";
+                    break;
+                case "KeyA": // esquerda
+                    selecionado.style.marginLeft = (margem(selecionado, "marginLeft") - PASSO) + "px";
+                    break;
+                case "KeyD": // direita
+                    selecionado.style.marginLeft = (margem(selecionado, "marginLeft") + PASSO) + "px";
+                    break;
+            }
+        });
+    </script>
+</body>
+
+</html>
